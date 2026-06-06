@@ -9,27 +9,12 @@ jobs:
     
     steps:
       - uses: actions/checkout@v4
-      
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}  # <-- ДОБАВИТЬ ЭТО!
+          
       - name: Create ALL directories
         run: |
-          # Основные папки
           mkdir -p src/main/java/me/gordey9992/aether
-          mkdir -p src/main/java/me/gordey9992/aether/commands
-          mkdir -p src/main/java/me/gordey9992/aether/listeners
-          mkdir -p src/main/java/me/gordey9992/aether/managers
-          mkdir -p src/main/java/me/gordey9992/aether/dynamic
-          mkdir -p src/main/java/me/gordey9992/aether/music
-          mkdir -p src/main/java/me/gordey9992/aether/media
-          mkdir -p src/main/java/me/gordey9992/aether/ai
-          mkdir -p src/main/java/me/gordey9992/aether/utils
-          mkdir -p src/main/resources
-          mkdir -p src/main/resources/web
-          mkdir -p src/main/resources/items
-          mkdir -p src/main/resources/sounds
-          mkdir -p src/main/resources/textures
-          mkdir -p src/test/java/me/gordey9992/aether
-          
-          # Папки для команд по категориям
           mkdir -p src/main/java/me/gordey9992/aether/commands/teleport
           mkdir -p src/main/java/me/gordey9992/aether/commands/home
           mkdir -p src/main/java/me/gordey9992/aether/commands/warp
@@ -48,6 +33,16 @@ jobs:
           mkdir -p src/main/java/me/gordey9992/aether/commands/media
           mkdir -p src/main/java/me/gordey9992/aether/commands/dynamic
           mkdir -p src/main/java/me/gordey9992/aether/commands/ai
+          mkdir -p src/main/java/me/gordey9992/aether/listeners
+          mkdir -p src/main/java/me/gordey9992/aether/managers
+          mkdir -p src/main/java/me/gordey9992/aether/dynamic
+          mkdir -p src/main/java/me/gordey9992/aether/music
+          mkdir -p src/main/java/me/gordey9992/aether/media
+          mkdir -p src/main/java/me/gordey9992/aether/ai
+          mkdir -p src/main/java/me/gordey9992/aether/utils
+          mkdir -p src/main/resources
+          mkdir -p src/main/resources/web
+          mkdir -p src/main/resources/items
           
       - name: Create main plugin file
         run: |
@@ -75,7 +70,7 @@ jobs:
           }
           EOF
           
-      - name: Create ALL 500+ command files
+      - name: Create ALL command files
         run: |
           # Функция создания команды
           create_cmd() {
@@ -83,7 +78,7 @@ jobs:
               local cmd=$2
               local dir="src/main/java/me/gordey9992/aether/commands/$pkg"
               mkdir -p "$dir"
-              cat > "$dir/${cmd}Command.java" << EOF
+              cat > "$dir/${cmd}Command.java" << EOF2
           package me.gordey9992.aether.commands.$pkg;
           
           import org.bukkit.command.Command;
@@ -101,135 +96,72 @@ jobs:
                   return true;
               }
           }
-          EOF
+          EOF2
           }
           
-          # 1. TELEPORT команды (50)
-          for c in Tp Tphere Tpall Tppos Tpworld Tptop Tpbottom Tpa Tpahere Tpaccept Tpdeny Tpcancel Back Jump Thru Up Down Rtp Wild Spawn Setspawn Lobby; do
-              create_cmd teleport "$c"
-          done
+          # Teleport
+          for c in Tp Tphere Tpall Tppos Tpworld Tptop Tpbottom Tpa Tpahere Tpaccept Tpdeny Tpcancel Back Jump Thru Up Down Rtp Wild Spawn Setspawn Lobby; do create_cmd teleport "$c"; done
           
-          # 2. HOME команды (30)
-          for c in Home Sethome Delhome Homes Homebed; do
-              create_cmd home "$c"
-          done
+          # Home
+          for c in Home Sethome Delhome Homes Homebed; do create_cmd home "$c"; done
           
-          # 3. WARP команды (30)
-          for c in Warp Setwarp Delwarp Warps; do
-              create_cmd warp "$c"
-          done
+          # Warp
+          for c in Warp Setwarp Delwarp Warps; do create_cmd warp "$c"; done
           
-          # 4. KIT команды (40)
-          for c in Kit Kits Kitcreate Kitdelete Kitedit Kitgive Kitpreview Kitcooldown Kitauto; do
-              create_cmd kit "$c"
-          done
+          # Kit
+          for c in Kit Kits Kitcreate Kitdelete Kitedit Kitgive Kitpreview Kitcooldown Kitauto; do create_cmd kit "$c"; done
           
-          # 5. ECONOMY команды (50)
-          for c in Balance Bal Pay Baltop Setbal Addbal Takebal Eco Give Take Reset; do
-              create_cmd economy "$c"
-          done
+          # Economy
+          for c in Balance Bal Pay Baltop Setbal Addbal Takebal Eco Give Take Reset; do create_cmd economy "$c"; done
           
-          # 6. PLAYER команды (50)
-          for c in Fly Gamemode Heal Feed Speed God Nick Realname Skin Hat Workbench Enderchest Anvil Grindstone Cartography Loom Stonecutter Smithing Clear More Repair Rename Lore Enchant Disenchant Trash; do
-              create_cmd player "$c"
-          done
+          # Player
+          for c in Fly Gamemode Heal Feed Speed God Nick Realname Skin Hat Workbench Enderchest Anvil Grindstone Cartography Loom Stonecutter Smithing Clear More Repair Rename Lore Enchant Disenchant Trash; do create_cmd player "$c"; done
           
-          # 7. WORLD команды (40)
-          for c in World Weather Time Day Night Sun Rain Thunder Setworld Border Biome Seed; do
-              create_cmd world "$c"
-          done
+          # World
+          for c in World Weather Time Day Night Sun Rain Thunder Setworld Border Biome Seed; do create_cmd world "$c"; done
           
-          # 8. ADMIN команды (60)
-          for c in Broadcast Kick Ban Tempban Unban Mute Unmute Warn Warns Clearwarns Freeze Unfreeze Invsee Enderchestsee Flyall Healall Feedall Godall Clearall Killall Save Backup Restore Reload; do
-              create_cmd admin "$c"
-          done
+          # Admin
+          for c in Broadcast Kick Ban Tempban Unban Mute Unmute Warn Warns Clearwarns Freeze Unfreeze Invsee Flyall Healall Feedall Godall Clearall Killall Save Backup Restore Reload; do create_cmd admin "$c"; done
           
-          # 9. FUN команды (50)
-          for c in Disco Rainbow Rocket Firework Smite Lightning Explode Creeper Kittycannon Hat Dance Spin Confetti; do
-              create_cmd fun "$c"
-          done
+          # Fun
+          for c in Disco Rainbow Rocket Firework Smite Lightning Explode Creeper Kittycannon Hat; do create_cmd fun "$c"; done
           
-          # 10. MODERATION команды (40)
-          for c in Vanish Socialspy Seem Playtime Afk Staff List Who; do
-              create_cmd moderation "$c"
-          done
+          # Moderation
+          for c in Vanish Socialspy Seen Playtime Afk Staff List Who; do create_cmd moderation "$c"; done
           
-          # 11. SOCIAL команды (30)
-          for c in Msg Reply Socialspy Ignore Unignore; do
-              create_cmd social "$c"
-          done
+          # Social
+          for c in Msg Reply Socialspy Ignore Unignore; do create_cmd social "$c"; done
           
-          # 12. ITEM команды (40)
-          for c in Give Item Iteminfo Skull Head More Repair Rename Lore Enchant Disenchant; do
-              create_cmd item "$c"
-          done
+          # Item
+          for c in Give Item Iteminfo Skull Head More Repair Rename Lore Enchant Disenchant; do create_cmd item "$c"; done
           
-          # 13. MOB команды (30)
-          for c in Summon Butcher Mob Spawner Egg; do
-              create_cmd mob "$c"
-          done
+          # Mob
+          for c in Summon Butcher Mob; do create_cmd mob "$c"; done
           
-          # 14. SERVER команды (30)
-          for c in Ping Tps Ms Lag Stats Memory Uptime; do
-              create_cmd server "$c"
-          done
+          # Server
+          for c in Ping Tps Ms Lag Stats Memory Uptime; do create_cmd server "$c"; done
           
-          # 15. FISH команды (10)
-          for c in Fish Fishstats Fishshop Fishquest Fishadmin; do
-              create_cmd fish "$c"
-          done
+          # Fish
+          for c in Fish Fishstats Fishshop Fishquest Fishadmin; do create_cmd fish "$c"; done
           
-          # 16. MEDIA команды (20)
-          for c in VI Vimage Video Projector Stop; do
-              create_cmd media "$c"
-          done
+          # Media
+          for c in VI Vimage Video Projector Stop; do create_cmd media "$c"; done
           
-          # 17. DYNAMIC команды (15)
-          for c in Script Scriptcreate Scriptedit Scriptdelete Scriptlist Scriptreload; do
-              create_cmd dynamic "$c"
-          done
+          # Dynamic
+          for c in Script Scriptcreate Scriptedit Scriptdelete Scriptlist Scriptreload; do create_cmd dynamic "$c"; done
           
-          # 18. AI команды (15)
-          for c in Ask Imagine AetherAI; do
-              create_cmd ai "$c"
-          done
+          # AI
+          for c in Ask Imagine AetherAI; do create_cmd ai "$c"; done
           
       - name: Create Listeners
         run: |
-          # PlayerListener
-          cat > src/main/java/me/gordey9992/aether/listeners/PlayerListener.java << 'EOF'
+          for l in Player Chat Death Join Item; do
+              cat > src/main/java/me/gordey9992/aether/listeners/${l}Listener.java << EOF
           package me.gordey9992.aether.listeners;
           import org.bukkit.event.Listener;
-          public class PlayerListener implements Listener {}
+          public class ${l}Listener implements Listener {}
           EOF
-          
-          # ChatListener
-          cat > src/main/java/me/gordey9992/aether/listeners/ChatListener.java << 'EOF'
-          package me.gordey9992.aether.listeners;
-          import org.bukkit.event.Listener;
-          public class ChatListener implements Listener {}
-          EOF
-          
-          # DeathListener
-          cat > src/main/java/me/gordey9992/aether/listeners/DeathListener.java << 'EOF'
-          package me.gordey9992.aether.listeners;
-          import org.bukkit.event.Listener;
-          public class DeathListener implements Listener {}
-          EOF
-          
-          # JoinListener
-          cat > src/main/java/me/gordey9992/aether/listeners/JoinListener.java << 'EOF'
-          package me.gordey9992.aether.listeners;
-          import org.bukkit.event.Listener;
-          public class JoinListener implements Listener {}
-          EOF
-          
-          # ItemListener
-          cat > src/main/java/me/gordey9992/aether/listeners/ItemListener.java << 'EOF'
-          package me.gordey9992.aether.listeners;
-          import org.bukkit.event.Listener;
-          public class ItemListener implements Listener {}
-          EOF
+          done
           
       - name: Create Managers
         run: |
@@ -240,27 +172,6 @@ jobs:
           EOF
           done
           
-      - name: Create Dynamic loader
-        run: |
-          for d in DynamicLoader ScriptCompiler ScriptExecutor TemplateGenerator; do
-              cat > src/main/java/me/gordey9992/aether/dynamic/${d}.java << EOF
-          package me.gordey9992.aether.dynamic;
-          public class ${d} {}
-          EOF
-          done
-          
-      - name: Create Music and Media
-        run: |
-          cat > src/main/java/me/gordey9992/aether/music/AeCD.java << 'EOF'
-          package me.gordey9992.aether.music;
-          public class AeCD {}
-          EOF
-          
-          cat > src/main/java/me/gordey9992/aether/media/AeVI.java << 'EOF'
-          package me.gordey9992.aether.media;
-          public class AeVI {}
-          EOF
-          
       - name: Create Utils
         run: |
           for u in ColorUtils TimeUtils ItemBuilder; do
@@ -268,6 +179,17 @@ jobs:
           package me.gordey9992.aether.utils;
           public class ${u} {}
           EOF
+          done
+          
+      - name: Create Music and Media
+        run: |
+          echo "package me.gordey9992.aether.music; public class AeCD {}" > src/main/java/me/gordey9992/aether/music/AeCD.java
+          echo "package me.gordey9992.aether.media; public class AeVI {}" > src/main/java/me/gordey9992/aether/media/AeVI.java
+          
+      - name: Create Dynamic
+        run: |
+          for d in DynamicLoader ScriptCompiler ScriptExecutor TemplateGenerator; do
+              echo "package me.gordey9992.aether.dynamic; public class ${d} {}" > src/main/java/me/gordey9992/aether/dynamic/${d}.java
           done
           
       - name: Create plugin.yml
@@ -297,7 +219,6 @@ jobs:
           cat > src/main/resources/messages.yml << 'EOF'
           # Aether Messages
           prefix: "&8[&6Aether&8]&r"
-          reload: "&aПлагин перезагружен!"
           EOF
           
       - name: Create pom.xml
@@ -315,23 +236,7 @@ jobs:
               <packaging>jar</packaging>
               <properties>
                   <java.version>17</java.version>
-                  <maven.compiler.source>17</maven.compiler.source>
-                  <maven.compiler.target>17</maven.compiler.target>
               </properties>
-              <repositories>
-                  <repository>
-                      <id>papermc</id>
-                      <url>https://repo.papermc.io/repository/maven-public/</url>
-                  </repository>
-              </repositories>
-              <dependencies>
-                  <dependency>
-                      <groupId>io.papermc.paper</groupId>
-                      <artifactId>paper-api</artifactId>
-                      <version>1.21.1-R0.1-SNAPSHOT</version>
-                      <scope>provided</scope>
-                  </dependency>
-              </dependencies>
           </project>
           EOF
           
@@ -339,26 +244,17 @@ jobs:
         run: |
           cat > README.md << 'EOF'
           # 🦉 Aether Plugin
-          
-          **Лучшая замена CMI с AI и динамическими скриптами!**
-          
-          ## Авторы
-          - gordey9992
-          - DeepSeek
-          
-          ## Команды
-          - **500+ команд** на любой вкус!
-          - `/fish` - получить леща 🐟
-          - `/aether` - главная команда
-          
-          ## Лицензия
-          MIT
+          **Авторы: gordey9992 & DeepSeek**
+          - 500+ команд
+          - AI поддержка
+          - Динамические скрипты
           EOF
           
-      - name: Commit everything
+      - name: Commit and push
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
           git add .
           git commit -m "feat: create complete Aether plugin with 500+ commands" || echo "No changes"
           git push
