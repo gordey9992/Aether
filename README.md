@@ -1,4 +1,4 @@
-<h1 align="center">🦉 Aether</h1>
+<h1 align="center"> Aether</h1>
 
 **Авторы: gordey9992 & DeepSeek**
 
