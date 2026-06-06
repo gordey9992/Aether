@@ -1,0 +1,9 @@
+name: Aether
+version: 1.0.0
+main: me.gordey9992.aether.Aether
+api-version: "1.21"
+author: gordey9992 & DeepSeek
+description: Лучшая замена CMI с AI и динамическими скриптами
+commands:
+  aether:
+    description: Главная команда плагина
