@@ -1,5 +1,5 @@
-# 🦉 Aether Plugin
+# Aether Plugin
 **Авторы: gordey9992 & DeepSeek**
-- 500+ команд
+- Много команд
 - AI поддержка
 - Динамические скрипты
